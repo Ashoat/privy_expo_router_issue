@@ -1,12 +1,22 @@
-const React = require('react')
+const React = require("react");
 
-const styled = new Proxy({}, {
-  get(target, p, receiver) {
-    console.log(target, p, receiver)
-    return () => React.Fragment
-  }
-})
+const component =
+  () =>
+  ({ key, children }) => <React.Fragment key={key}>{children}</React.Fragment>;
+
+component.withConfig = () => component;
+component.attrs = () => component;
+
+const styled = new Proxy(component, {
+  apply(target, thisArg, argArray) {
+    return component;
+  },
+  get(_, p) {
+    return component;
+  },
+});
 
 module.exports = {
-  styled
-}
+  styled,
+  css: () => "",
+};
